@@ -1,0 +1,48 @@
+{% extends 'generic/object_list.html' %}
+{% load helpers %}
+{% load static %}
+{% load i18n %}
+{% load render_table from django_tables2 %}
+
+{% block title %}{% trans "Tenant IP List" %}{% endblock %}
+
+{% block content-wrapper %}
+  <div class="tab-content">
+
+    {% if filter_form %}
+      {% applied_filters model filter_form request.GET %}
+    {% endif %}
+
+    {# IP view #}
+    <div class="tab-pane show active" id="object-list" role="tabpanel" aria-labelledby="object-list-tab">
+      {% if page %}
+          <div style="white-space: nowrap; overflow-x: scroll;">
+              {% for entry in tables %}
+                  <div style="display: inline-block; margin-right: 12px">
+                  <div style="margin-left: 30px">
+                      <div class="text-center">
+                          <strong><a href="{% url 'ipam:prefix' pk=entry.prefix.pk %}">{{ entry.prefix.prefix }}</a></strong>
+                           {% render_table entry.table %}
+                      </div>
+                  </div>
+                  </div>
+              {% endfor %}
+          </div>
+          <br />
+          {% include 'inc/paginator.html' %}
+      {% else %}
+          <p>{% trans "No Prefixes Found" %}</p>
+      {% endif %}
+    </div>
+
+    {# Filter form #}
+    {% if filter_form %}
+      <div class="tab-pane show" id="filters-form" role="tabpanel" aria-labelledby="filters-form-tab">
+        {% include 'inc/filter_list.html' %}
+      </div>
+    {% endif %}
+
+  </div>
+{% endblock content-wrapper %}
+
+{% block modals %}{% endblock %}
