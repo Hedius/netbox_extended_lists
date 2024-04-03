@@ -136,7 +136,7 @@ class ExtendedPrefixListView(generic.ObjectListView):
             })
 
         # Determine rack face
-        return render(request, 'netbox_extended_prefix_list/prefix_list.html', {
+        return render(request, 'netbox_extended_lists/prefix_list.html', {
             'paginator': paginator,
             'page': page,
             'total_count': total_count,

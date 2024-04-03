@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='netbox-extended-prefix-list',
+    name='netbox-extended-lists',
     version='0.2.1',
     description='Lists all prefixes and their IPs.',
     install_requires=[],
