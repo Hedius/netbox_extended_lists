@@ -16,13 +16,14 @@
     {# IP view #}
     <div class="tab-pane show active" id="object-list" role="tabpanel" aria-labelledby="object-list-tab">
       {% if page %}
-          <div style="white-space: nowrap; overflow-x: scroll;">
+          <div style="white-space: nowrap; display: flex; flex-direction: row; flex-wrap: wrap;">
               {% for entry in tables %}
                   <div style="display: inline-block; margin-right: 12px">
                   <div style="margin-left: 30px">
                       <div class="text-center">
                           <strong><a href="{% url 'ipam:prefix' pk=entry.prefix.pk %}">{{ entry.prefix.prefix }}</a></strong>
-                           {% render_table entry.table %}
+                          <strong>{{ entry.prefix.vlan }}</strong>
+                            {% render_table entry.table %}
                       </div>
                   </div>
                   </div>
