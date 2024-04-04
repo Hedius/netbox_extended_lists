@@ -91,6 +91,7 @@ class ExtendedPrefixListView(generic.ObjectListView):
     """
     Display a set of rack elevations side-by-side.
     """
+    additional_permissions = ['ipam.view_prefix', 'ipam.view_ipaddress']
     queryset = Prefix.objects.prefetch_related(
         'site', 'vrf__tenant', 'tenant', 'vlan', 'role', 'tags'
     )
