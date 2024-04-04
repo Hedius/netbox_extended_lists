@@ -6,6 +6,23 @@
 
 {% block title %}{% trans "Tenant IP List" %}{% endblock %}
 
+{% block controls %}
+  <div class="controls">
+    <div class="control-group">
+      <div class="dropdown">
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="mdi mdi-sort"></i> {% trans "Sort By" %} {{ sort_display_name }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          {% for sort_key, sort_display_name in sort_choices.items %}
+            <li><a class="dropdown-item{% if sort == sort_key %} active{% endif %}" href="{% url 'plugins:netbox_extended_lists:prefix_list' %}{% querystring request sort=sort_key %}">{{ sort_display_name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content-wrapper %}
   <div class="tab-content">
 

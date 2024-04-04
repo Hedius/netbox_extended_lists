@@ -1,7 +1,9 @@
-from django.utils.translation import gettext_lazy as _
-from django.core.paginator import PageNotAnInteger, EmptyPage
-from django.shortcuts import render
 import django_tables2 as tables
+from django.core.exceptions import ValidationError
+from django.core.paginator import PageNotAnInteger, EmptyPage
+from django.http import Http404
+from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
 from ipam import filtersets
 from ipam.filtersets import PrefixFilterSet
@@ -39,7 +41,7 @@ class IPAddressTable(TenancyColumnsMixin, NetBoxTable):
     assigned_device = tables.Column(
         linkify=True,
         orderable=False,
-        accessor='assigned_object__device',
+        accessor='assigned_object__parent_object',
         verbose_name=_('Device / VM')
     )
     assigned_object_parent = tables.Column(
@@ -99,27 +101,30 @@ class ExtendedPrefixListView(generic.ObjectListView):
     filterset_form = PrefixFilterForm
 
     def get(self, request):
-
-        prefixes = filtersets.PrefixFilterSet(request.GET, self.queryset).qs
+        prefixes = filtersets.PrefixFilterSet(request.GET, self.queryset).qs.exclude(status='container')
         total_count = prefixes.count()
+
+        # if 'tenant_id' not in self.request.GET:
+        #     raise Http404('tenant_id needs to be set.')
 
         # Ordering
         ORDERING_CHOICES = {
-            # 'name': 'Name (A-Z)',
-            # '-name': 'Name (Z-A)',
-            # 'facility_id': 'Facility ID (A-Z)',
-            # '-facility_id': 'Facility ID (Z-A)',
+            'vlan_id': 'VLAN ID',
+            'prefix': 'Prefix',
         }
-        # sort = request.GET.get('sort', 'name')
-        # if sort not in ORDERING_CHOICES:
-        #     sort = 'name'
+        sort = request.GET.get('sort', 'vlan_id')
+        if sort not in ORDERING_CHOICES:
+            sort = 'vlan_id'
         # sort_field = sort.replace("name", "_name")  # Use natural ordering
-        # racks = racks.order_by(sort_field)
+        sort_keys = {sort, 'prefix'}
+        prefixes = prefixes.order_by(*sort_keys)
 
         # Pagination
         per_page = get_paginate_count(request)
+        if per_page <= 100:
+            per_page = 100
         page_number = request.GET.get('page', 1)
-        paginator = EnhancedPaginator(prefixes, 10000)
+        paginator = EnhancedPaginator(prefixes, per_page)
         try:
             page = paginator.page(page_number)
         except PageNotAnInteger:
