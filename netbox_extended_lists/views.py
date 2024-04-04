@@ -80,7 +80,7 @@ class IPAddressTable(TenancyColumnsMixin, NetBoxTable):
             'assigned', 'assigned_device', 'assigned_object', 'dns_name', 'description', 'comments', 'tags', 'created', 'last_updated',
         )
         default_columns = (
-            'pk', 'address', 'vrf', 'status', 'role', 'tenant', 'assigned', 'assigned_device', 'assigned_object', 'description',
+            'pk', 'address', 'vrf', 'status', 'role', 'tenant', 'assigned_device', 'assigned_object', 'description',
         )
         row_attrs = {
             'class': lambda record: 'success' if not isinstance(record, IPAddress) else '',
