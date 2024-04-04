@@ -118,7 +118,7 @@ class ExtendedPrefixListView(generic.ObjectListView):
         # Pagination
         per_page = get_paginate_count(request)
         page_number = request.GET.get('page', 1)
-        paginator = EnhancedPaginator(prefixes, per_page)
+        paginator = EnhancedPaginator(prefixes, 10000)
         try:
             page = paginator.page(page_number)
         except PageNotAnInteger:
