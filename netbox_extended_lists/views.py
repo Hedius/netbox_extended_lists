@@ -108,7 +108,9 @@ class ExtendedPrefixListView(generic.ObjectListView):
         if sort not in ordering_choices:
             sort = 'vlan__vid'
         # sort_field = sort.replace("name", "_name")  # Use natural ordering
-        sort_keys = {sort, 'prefix'}
+        sort_keys = [sort]
+        if 'prefix' not in sort_keys:
+            sort_keys.append('prefix')
         prefixes = prefixes.order_by(*sort_keys)
 
         # Pagination
