@@ -114,12 +114,12 @@ class ExtendedPrefixListView(generic.ObjectListView):
         prefixes = prefixes.order_by(*sort_keys)
 
         # Pagination
-        if 'tenant_id' not in request.GET:
-            per_page = get_paginate_count(request)
-            if per_page >= 100:
-                per_page = 100
+        per_page = get_paginate_count(request)
+        if 'tenant_id' not in request.GET and per_page >= 100:
+            per_page = 100
         else:
-            per_page = 1000
+            if prefixes.count() >= 200:
+                per_page = 100
         page_number = request.GET.get('page', 1)
         paginator = EnhancedPaginator(prefixes, per_page)
         try:
