@@ -1,10 +1,10 @@
 from setuptools import find_packages, setup
 
-from netbox_extended_lists import version
+from netbox_extended_lists import VERSION
 
 setup(
     name='netbox-extended-lists',
-    version=version,
+    version=VERSION,
     description='Adds extended views / lists to NetBox.',
     url='https://github.com/Hedius/netbox_extended_lists',
     author='Hedius & pheeef',
