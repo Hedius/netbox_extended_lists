@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-from netbox_extended_lists import VERSION
+from netbox_extended_lists.version import VERSION
 
 setup(
     name='netbox-extended-lists',
