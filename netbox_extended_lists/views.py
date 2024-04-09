@@ -95,28 +95,29 @@ class ExtendedPrefixListView(generic.ObjectListView):
     filterset_form = PrefixFilterForm
 
     def get(self, request):
+        # Initial pull
         prefixes = filtersets.PrefixFilterSet(request.GET, self.queryset).qs.exclude(status='container')
         total_count = prefixes.count()
 
-        # if 'tenant_id' not in self.request.GET:
-        #     raise Http404('tenant_id needs to be set.')
-
         # Ordering
-        ORDERING_CHOICES = {
-            'vlan_id': 'VLAN ID',
+        ordering_choices = {
+            'vlan__vid': 'VLAN ID',
             'prefix': 'Prefix',
         }
-        sort = request.GET.get('sort', 'vlan_id')
-        if sort not in ORDERING_CHOICES:
-            sort = 'vlan_id'
+        sort = request.GET.get('sort', 'vlan__vid')
+        if sort not in ordering_choices:
+            sort = 'vlan__vid'
         # sort_field = sort.replace("name", "_name")  # Use natural ordering
         sort_keys = {sort, 'prefix'}
         prefixes = prefixes.order_by(*sort_keys)
 
         # Pagination
-        per_page = get_paginate_count(request)
-        if per_page <= 100:
-            per_page = 100
+        if 'tenant_id' not in request.GET:
+            per_page = get_paginate_count(request)
+            if per_page >= 100:
+                per_page = 100
+        else:
+            per_page = 1000
         page_number = request.GET.get('page', 1)
         paginator = EnhancedPaginator(prefixes, per_page)
         try:
@@ -140,7 +141,9 @@ class ExtendedPrefixListView(generic.ObjectListView):
             'paginator': paginator,
             'page': page,
             'total_count': total_count,
-            'sort_choices': ORDERING_CHOICES,
+            'sort': sort,
+            'sort_display_name': ordering_choices[sort],
+            'sort_choices': ordering_choices,
             'filter_form': PrefixFilterForm(request.GET),
             'model': self.queryset.model,
             'tables': ip_tables
