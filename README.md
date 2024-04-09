@@ -1,5 +1,11 @@
-## netbox_extended_prefix_list
+# netbox_extended_lists
 
-Adds a view to NetBox which lists prefixes and their IP addresses.
+This plugin adds another view to NetBox to view prefixes
+and their IP address allocation.
+Still in testing atm.
 
-WIP
+![Screenshot showing the prefix list](img/prefix_list.png)
+
+
+## Licence
+GPLv3.
