@@ -1,13 +1,11 @@
 from extras.plugins import PluginConfig
 
-from version import VERSION
-
 
 class NetBoxExtendedLists(PluginConfig):
     name = 'netbox_extended_lists'
     verbose_name = ' NetBox Extended Lists'
     description = 'Adds additional views to netbox with extended information'
-    version = VERSION
+    version = '1.0.0'
     base_url = 'extended-lists'
     author = 'Hedius & pheeef'
     author_email = 'git@hedius.eu'
