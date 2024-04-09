@@ -44,12 +44,6 @@ class PrefixIpTable(TenancyColumnsMixin, NetBoxTable):
         accessor='assigned_object__parent_object',
         verbose_name=_('Device / VM')
     )
-    assigned_object_parent = tables.Column(
-        accessor='assigned_object__parent_object',
-        linkify=True,
-        orderable=False,
-        verbose_name=_('Parent')
-    )
     nat_inside = tables.Column(
         linkify=True,
         orderable=False,
@@ -82,7 +76,7 @@ class PrefixIpTable(TenancyColumnsMixin, NetBoxTable):
             'assigned', 'assigned_device', 'assigned_object', 'dns_name', 'description', 'comments', 'tags', 'created', 'last_updated',
         )
         default_columns = (
-            'pk', 'address', 'vrf', 'status', 'role', 'tenant', 'assigned_device', 'assigned_object', 'description',
+            'pk', 'address', 'vrf', 'status', 'role', 'assigned_device', 'assigned_object', 'description',
         )
         row_attrs = {
             'class': lambda record: 'success' if not isinstance(record, IPAddress) else '',
