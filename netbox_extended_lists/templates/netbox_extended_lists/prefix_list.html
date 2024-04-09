@@ -47,7 +47,7 @@
                                 <a class="btn btn-sm badge bg-green" href="{% url 'ipam:vrf' pk=entry.prefix.vrf.pk %}">VRF: {{ entry.prefix.vrf }}</a>
                             {% endif %}
                             {% if entry.prefix.status %}
-                                <span class="btn btn-sm badge bg-blue">Status: {{ entry.prefix.status }}</span>
+                                <span class="btn-sm badge bg-blue">Status: {{ entry.prefix.status }}</span>
                             {% endif %}
                             {% if entry.prefix.role %}
                                 <a class="btn btn-sm badge bg-orange" href="{% url 'ipam:role' pk=entry.prefix.role.pk %}">Role: {{ entry.prefix.role }}</a>
