@@ -17,7 +17,7 @@ from tenancy.tables import TenancyColumnsMixin
 from utilities.paginator import get_paginate_count, EnhancedPaginator
 
 
-class IPAddressTable(TenancyColumnsMixin, NetBoxTable):
+class PrefixIpTable(TenancyColumnsMixin, NetBoxTable):
     address = tables.TemplateColumn(
         template_code=ip_table.IPADDRESS_LINK,
         verbose_name=_('IP Address')
@@ -138,7 +138,7 @@ class ExtendedPrefixListView(generic.ObjectListView):
             ips = add_available_ipaddresses(prefix.prefix, ips, prefix.is_pool)
             ip_tables.append({
                 'prefix': prefix,
-                'table': IPAddressTable(ips)
+                'table': PrefixIpTable(ips)
             })
 
         # Determine rack face
