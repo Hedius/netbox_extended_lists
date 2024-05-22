@@ -7,10 +7,10 @@
 {% block title %}{% trans "Prefix List" %}{% endblock %}
 
 {% block controls %}
-  <div class="controls">
-    <div class="control-group">
+  <div class="col-auto d-print-none">
+    <div class="btn-list">
       <div class="dropdown">
-        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="mdi mdi-sort"></i> {% trans "Sort By" %} {{ sort_display_name }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -23,8 +23,7 @@
   </div>
 {% endblock %}
 
-{% block content-wrapper %}
-  <div class="tab-content">
+{% block content %}
 
     {% if filter_form %}
       {% applied_filters model filter_form request.GET %}
@@ -41,19 +40,19 @@
                             <!-- Table title -->
                             <strong><a href="{% url 'ipam:prefix' pk=entry.prefix.pk %}">{{ entry.prefix.prefix }}</a></strong>
                             {% if entry.prefix.vlan %}
-                                <a class="btn btn-sm badge bg-yellow" href="{% url 'ipam:vlan' pk=entry.prefix.vlan.pk %}">VLAN: {{ entry.prefix.vlan }}</a>
+                                <a class="btn badge bg-yellow" href="{% url 'ipam:vlan' pk=entry.prefix.vlan.pk %}">VLAN: {{ entry.prefix.vlan }}</a>
                             {% endif %}
                             {% if entry.prefix.vrf %}
-                                <a class="btn btn-sm badge bg-green" href="{% url 'ipam:vrf' pk=entry.prefix.vrf.pk %}">VRF: {{ entry.prefix.vrf }}</a>
+                                <a class="btn badge bg-green" href="{% url 'ipam:vrf' pk=entry.prefix.vrf.pk %}">VRF: {{ entry.prefix.vrf }}</a>
                             {% endif %}
                             {% if entry.prefix.status %}
-                                <span class="btn-sm badge bg-blue">Status: {{ entry.prefix.status }}</span>
+                                <a class="btn badge bg-azure" style="cursor: auto;">Status: {{ entry.prefix.status }}</a>
                             {% endif %}
                             {% if entry.prefix.role %}
-                                <a class="btn btn-sm badge bg-orange" href="{% url 'ipam:role' pk=entry.prefix.role.pk %}">Role: {{ entry.prefix.role }}</a>
+                                <a class="btn badge bg-orange" href="{% url 'ipam:role' pk=entry.prefix.role.pk %}">Role: {{ entry.prefix.role }}</a>
                             {% endif %}
                             {% if entry.prefix.tenant %}
-                                <a class="btn btn-sm badge bg-gray" href="{% url 'tenancy:tenant' pk=entry.prefix.tenant.pk %}">Tenant: {{ entry.prefix.tenant }}</a>
+                                <a class="btn badge bg-red" href="{% url 'tenancy:tenant' pk=entry.prefix.tenant.pk %}">Tenant: {{ entry.prefix.tenant }}</a>
                             {% endif %}
 
                             <!-- table -->
@@ -77,7 +76,6 @@
       </div>
     {% endif %}
 
-  </div>
-{% endblock content-wrapper %}
+{% endblock content %}
 
 {% block modals %}{% endblock %}

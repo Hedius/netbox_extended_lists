@@ -1,7 +1,5 @@
 import django_tables2 as tables
-from django.core.exceptions import ValidationError
 from django.core.paginator import PageNotAnInteger, EmptyPage
-from django.http import Http404
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
