@@ -15,9 +15,22 @@ from tenancy.tables import TenancyColumnsMixin
 from utilities.paginator import get_paginate_count, EnhancedPaginator
 
 
+# This is ip_table.IPADDRESS_LINK adjusted and without the return path logic.
+# todo. in the 2nd case settint vrf/tenant etc. does not work
+IPADDRESS_LINK = """
+{% if record.pk %}
+    <a href="{{ record.get_absolute_url }}" id="ipaddress_{{ record.pk }}">{{ record.address }}</a>
+{% elif perms.ipam.add_ipaddress %}
+    <a href="{% url 'ipam:ipaddress_add' %}?address={{ record.1 }}{% if object.vrf %}&vrf={{ object.vrf.pk }}{% endif %}{% if object.tenant %}&tenant={{ object.tenant.pk }}{% endif %}" class="btn btn-sm btn-success">{% if record.0 <= 65536 %}{{ record.0 }}{% else %}Many{% endif %} IP{{ record.0|pluralize }} available</a>
+{% else %}
+    {% if record.0 <= 65536 %}{{ record.0 }}{% else %}Many{% endif %} IP{{ record.0|pluralize }} available
+{% endif %}
+"""
+
+
 class PrefixIpTable(TenancyColumnsMixin, NetBoxTable):
     address = tables.TemplateColumn(
-        template_code=ip_table.IPADDRESS_LINK,
+        template_code=IPADDRESS_LINK,
         verbose_name=_('IP Address')
     )
     vrf = tables.TemplateColumn(
