@@ -100,7 +100,7 @@ class ExtendedPrefixListView(generic.ObjectListView):
     """
     additional_permissions = ['ipam.view_prefix', 'ipam.view_ipaddress']
     queryset = Prefix.objects.prefetch_related(
-        'site', 'vrf__tenant', 'tenant', 'vlan', 'role', 'tags'
+        'scope', 'vrf__tenant', 'tenant', 'vlan', 'role', 'tags'
     )
     filterset = PrefixFilterSet
     filterset_form = PrefixFilterForm
