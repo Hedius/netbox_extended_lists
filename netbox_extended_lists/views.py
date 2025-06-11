@@ -8,7 +8,7 @@ from ipam.filtersets import PrefixFilterSet
 from ipam.forms import PrefixFilterForm
 from ipam.models import Prefix, IPAddress
 from ipam.tables import ip as ip_table
-from ipam.utils import add_available_ipaddresses
+from ipam.utils import annotate_ip_space
 from netbox.tables import NetBoxTable, columns
 from netbox.views import generic
 from tenancy.tables import TenancyColumnsMixin
@@ -28,15 +28,15 @@ IPADDRESS_LINK = """
 """
 
 
-class PrefixIpTable(TenancyColumnsMixin, NetBoxTable):
+class PrefixIpTable(NetBoxTable):
     address = tables.TemplateColumn(
         template_code=IPADDRESS_LINK,
         verbose_name=_('IP Address')
     )
-    vrf = tables.TemplateColumn(
-        template_code=ip_table.VRF_LINK,
-        verbose_name=_('VRF')
-    )
+    # vrf = tables.TemplateColumn(
+    #     template_code=ip_table.VRF_LINK,
+    #     verbose_name=_('VRF')
+    # )
     status = columns.ChoiceFieldColumn(
         verbose_name=_('Status'),
         default=ip_table.AVAILABLE_LABEL
@@ -55,39 +55,40 @@ class PrefixIpTable(TenancyColumnsMixin, NetBoxTable):
         accessor='assigned_object__parent_object',
         verbose_name=_('Device / VM')
     )
-    nat_inside = tables.Column(
-        linkify=True,
-        orderable=False,
-        verbose_name=_('NAT (Inside)')
-    )
-    nat_outside = tables.ManyToManyColumn(
-        linkify_item=True,
-        orderable=False,
-        verbose_name=_('NAT (Outside)')
-    )
-    assigned = columns.BooleanColumn(
-        accessor='assigned_object_id',
-        linkify=lambda record: record.assigned_object.get_absolute_url(),
-        verbose_name=_('Assigned')
-    )
-    comments = columns.MarkdownColumn(
-        verbose_name=_('Comments'),
-    )
-    tags = columns.TagColumn(
-        url_name='ipam:ipaddress_list'
-    )
+    # nat_inside = tables.Column(
+    #     linkify=True,
+    #     orderable=False,
+    #     verbose_name=_('NAT (Inside)')
+    # )
+    # nat_outside = tables.ManyToManyColumn(
+    #     linkify_item=True,
+    #     orderable=False,
+    #     verbose_name=_('NAT (Outside)')
+    # )
+    # assigned = columns.BooleanColumn(
+    #     accessor='assigned_object_id',
+    #     linkify=lambda record: record.assigned_object.get_absolute_url(),
+    #     verbose_name=_('Assigned')
+    # )
+    # comments = columns.MarkdownColumn(
+    #     verbose_name=_('Comments'),
+    # )
+    # tags = columns.TagColumn(
+    #     url_name='ipam:ipaddress_list'
+    # )
     actions = columns.ActionsColumn(
         extra_buttons=ip_table.IPADDRESS_COPY_BUTTON
     )
 
+    id = None
+
     class Meta(NetBoxTable.Meta):
         model = IPAddress
         fields = (
-            'pk', 'id', 'address', 'vrf', 'status', 'role', 'tenant', 'tenant_group', 'nat_inside', 'nat_outside',
-            'assigned', 'assigned_device', 'assigned_object', 'dns_name', 'description', 'comments', 'tags', 'created', 'last_updated',
+            'address', 'status', 'role', 'assigned_device', 'assigned_object', 'description',
         )
         default_columns = (
-            'pk', 'address', 'status', 'role', 'assigned_device', 'assigned_object', 'description',
+            'address', 'status', 'role', 'assigned_device', 'assigned_object', 'description',
         )
         row_attrs = {
             'class': lambda record: 'success' if not isinstance(record, IPAddress) else '',
@@ -144,8 +145,8 @@ class ExtendedPrefixListView(generic.ObjectListView):
 
         ip_tables = []
         for prefix in page:
-            ips = prefix.get_child_ips().restrict(request.user, 'view').prefetch_related('vrf', 'tenant', 'tenant__group', 'assigned_object')
-            ips = add_available_ipaddresses(prefix.prefix, ips, prefix.is_pool)
+            # ips = prefix.get_child_ips().restrict(request.user, 'view').prefetch_related('vrf', 'tenant', 'tenant__group', 'assigned_object')
+            ips = annotate_ip_space(prefix)
             ip_tables.append({
                 'prefix': prefix,
                 'table': PrefixIpTable(ips)

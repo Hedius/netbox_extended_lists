@@ -40,19 +40,19 @@
                             <!-- Table title -->
                             <strong><a href="{% url 'ipam:prefix' pk=entry.prefix.pk %}">{{ entry.prefix.prefix }}</a></strong>
                             {% if entry.prefix.vlan %}
-                                <a class="btn badge bg-yellow" href="{% url 'ipam:vlan' pk=entry.prefix.vlan.pk %}">VLAN: {{ entry.prefix.vlan }}</a>
+                                <a class="btn badge text-bg-yellow" href="{% url 'ipam:vlan' pk=entry.prefix.vlan.pk %}">VLAN: {{ entry.prefix.vlan }}</a>
                             {% endif %}
                             {% if entry.prefix.vrf %}
-                                <a class="btn badge bg-green" href="{% url 'ipam:vrf' pk=entry.prefix.vrf.pk %}">VRF: {{ entry.prefix.vrf }}</a>
+                                <a class="btn badge text-bg-green" href="{% url 'ipam:vrf' pk=entry.prefix.vrf.pk %}">VRF: {{ entry.prefix.vrf }}</a>
                             {% endif %}
                             {% if entry.prefix.status %}
-                                <a class="btn badge bg-azure" style="cursor: auto;">Status: {{ entry.prefix.status }}</a>
+                                <a class="btn badge text-bg-azure" style="cursor: auto;">Status: {{ entry.prefix.status }}</a>
                             {% endif %}
                             {% if entry.prefix.role %}
-                                <a class="btn badge bg-orange" href="{% url 'ipam:role' pk=entry.prefix.role.pk %}">Role: {{ entry.prefix.role }}</a>
+                                <a class="btn badge text-bg-orange" href="{% url 'ipam:role' pk=entry.prefix.role.pk %}">Role: {{ entry.prefix.role }}</a>
                             {% endif %}
                             {% if entry.prefix.tenant %}
-                                <a class="btn badge bg-red" href="{% url 'tenancy:tenant' pk=entry.prefix.tenant.pk %}">Tenant: {{ entry.prefix.tenant }}</a>
+                                <a class="btn badge text-bg-red" href="{% url 'tenancy:tenant' pk=entry.prefix.tenant.pk %}">Tenant: {{ entry.prefix.tenant }}</a>
                             {% endif %}
 
                             <!-- table -->
