@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='netbox-extended-lists',
-    version='1.2.0',
+    version='1.2.1',
     description='Adds extended views / lists to NetBox.',
     url='https://github.com/Hedius/netbox_extended_lists',
     author='Hedius & pheeef',
